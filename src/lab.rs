@@ -1,11 +1,17 @@
+use crate::units::Unit;
+
 pub mod blood;
 
 /// Trait shared by numeric lab values with defined normal and abnormal ranges
-pub trait NumericRanged {
+pub trait NumericRanged<U: Unit> {
     /// Obtain the numeric lab result.
     fn value(&self) -> f64;
     /// Get a descriptive category (high/low/critical) for a numeric lab result.
     fn range(&self) -> ResultRange;
+    /// Get the units for this value
+    fn units(&self) -> &'static str {
+        U::ABBR
+    }
 }
 
 /// Describes possible ranges for numeric results.
