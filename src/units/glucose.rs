@@ -22,3 +22,25 @@ impl GlucoseUnit for MmolL {
         val
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn mgdl_glucose_conversion_uses_defined_factors() {
+        let mgdl = 90.0;
+        let mmol = MgdL::to_mmol_l(mgdl);
+        assert!((mmol - mgdl * GLU_MGDL_TO_MMOLL).abs() < f64::EPSILON);
+
+        let back_to_mgdl = MgdL::from_mmol_l(mmol);
+        assert!((back_to_mgdl - mgdl).abs() < f64::EPSILON);
+    }
+
+    #[test]
+    fn mmol_glucose_conversion_is_identity() {
+        let mmol = 5.0;
+        assert_eq!(MmolL::to_mmol_l(mmol), mmol);
+        assert_eq!(MmolL::from_mmol_l(mmol), mmol);
+    }
+}
