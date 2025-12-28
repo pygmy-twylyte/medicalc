@@ -32,3 +32,14 @@ pub struct RangeThreshold {
     pub norm_hi: f64,
     pub hi_crit: f64,
 }
+
+/// Determine an named range (e.g. normal or critical high) for a given value.
+pub fn select_range(value: f64, thresholds: &RangeThreshold) -> ResultRange {
+    match value {
+        val if val <= thresholds.crit_low => ResultRange::CriticalLow,
+        val if val <= thresholds.low_norm => ResultRange::Low,
+        val if val <= thresholds.norm_hi => ResultRange::Normal,
+        val if val <= thresholds.hi_crit => ResultRange::High,
+        _ => ResultRange::CriticalHigh,
+    }
+}
