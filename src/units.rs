@@ -8,6 +8,7 @@ pub trait Unit {
     const ABBR: &'static str;
 }
 
+pub mod creatinine;
 pub mod glucose;
 pub mod sodium;
 
@@ -30,4 +31,11 @@ impl Unit for MgdL {
 pub struct MmolL;
 impl Unit for MmolL {
     const ABBR: &'static str = "mmol/L";
+}
+
+/// Micromoles per liter (µmol/L)
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub struct UmolL;
+impl Unit for UmolL {
+    const ABBR: &'static str = "µmol/L";
 }
