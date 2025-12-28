@@ -14,7 +14,7 @@ fn main() {
     for val in &gluvals {
         let glucose = val.glu_serum_mg_dl();
         let na_corrected = medicalc::calculators::correct_na_for_glucose(na_measured, glucose);
-        println!("{} -> {}", glucose, na_corrected);
+        println!("{glucose} -> {na_corrected}");
     }
 
     // now try it with mixed SI and conventional units
@@ -24,6 +24,6 @@ fn main() {
     for val in &gluvals_mmol {
         let glucose = val.glu_serum_mmol_l();
         let na_corrected = medicalc::calculators::correct_na_for_glucose(na_measured, glucose);
-        println!("{} -> {}", glucose, na_corrected);
+        println!("{glucose} -> {na_corrected}");
     }
 }

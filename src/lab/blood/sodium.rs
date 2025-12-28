@@ -1,7 +1,7 @@
 //! Sodium (serum) module
 //!
 //! Chemistry 101: Sodium (Na+) is monovalent, making milliequivalents (mEq) and
-//! millimoles (mmoplasma_na_ranges_are_correctl) the same. So no conversion factor is needed to go from SI to
+//! millimoles (mmol) the same. So no conversion factor is needed to go from SI to
 //! conventional units in this case.
 
 use std::marker::PhantomData;
