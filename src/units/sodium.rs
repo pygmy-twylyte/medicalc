@@ -21,3 +21,18 @@ impl SodiumUnit for MmolL {
         val
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn sodium_meq_and_mmol_are_equivalent() {
+        let value = 138.0;
+        assert_eq!(MeqL::to_mmol_l(value), value);
+        assert_eq!(MeqL::from_mmol_l(value), value);
+
+        assert_eq!(MmolL::to_mmol_l(value), value);
+        assert_eq!(MmolL::from_mmol_l(value), value);
+    }
+}
