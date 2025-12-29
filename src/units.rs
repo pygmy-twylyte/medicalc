@@ -12,6 +12,13 @@ pub mod creatinine;
 pub mod glucose;
 pub mod sodium;
 
+/// GFR Units (mL/min/1.73m^2)
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub struct GfrUnit;
+impl Unit for GfrUnit {
+    const ABBR: &'static str = "mL/min/1.73m²";
+}
+
 /// Milliequivalents per liter (mEq/L).
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct MeqL;
