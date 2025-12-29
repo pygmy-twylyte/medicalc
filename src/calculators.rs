@@ -9,8 +9,12 @@
 //! and use SI as the "canonical" units for calculations.
 
 use crate::{
-    lab::blood::{glucose::Glucose, sodium::Sodium},
-    units::{glucose::GlucoseUnit, sodium::SodiumUnit},
+    history::{Gender, Years},
+    lab::{
+        blood::{creatinine::Creatinine, glucose::Glucose, sodium::Sodium},
+        gfr::Gfr,
+    },
+    units::{GfrUnit, MgdL, creatinine::CreatinineUnit, glucose::GlucoseUnit, sodium::SodiumUnit},
 };
 
 /// Sodium correction for hyperglycemia.
@@ -46,6 +50,34 @@ where
     // return the corrected measurement, converting back to the
     // same units (N) that were input as needed.
     Sodium::from(N::from_mmol_l(corrected_na))
+}
+
+/// CKD-EPI 2021 calculation (creatinine only).
+///
+/// The equation uses serum creatinine expressed in mg/dL.
+pub fn egfr_ckd_epi<U: CreatinineUnit>(
+    scr: Creatinine<U>,
+    age: Years,
+    sex: Gender,
+) -> Gfr<GfrUnit> {
+    // set the sex-determined constants (2021 race-free equation)
+    let (kappa, alpha, sex_mult) = if sex == Gender::Female {
+        (0.7, -0.241, 1.012)
+    } else {
+        (0.9, -0.302, 1.0)
+    };
+
+    // make sure we have SCr value in mg/dL... a little awkward since we've standardized
+    // elsewhere in SI units
+    let scr_umol_l = U::to_umol_l(scr.value());
+    let scr_mg_dl = MgdL::from_umol_l(scr_umol_l);
+
+    let ratio = scr_mg_dl / kappa;
+    let second_term = (1.0f64.min(ratio)).powf(alpha);
+    let third_term = (1.0f64.max(ratio)).powf(-1.200);
+    let fourth_term = 0.9938f64.powf(age.0);
+    let egfr = 142.0 * second_term * third_term * fourth_term * sex_mult;
+    Gfr::from(egfr)
 }
 
 #[cfg(test)]
