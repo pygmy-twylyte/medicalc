@@ -1,9 +1,28 @@
+use medicalc::calculators::egfr_ckd_epi;
+use medicalc::history::{Gender, Years};
+use medicalc::lab::blood::creatinine::CreatinineExt;
 use medicalc::lab::blood::glucose::SerumGlucoseExt;
 use medicalc::lab::blood::sodium::SerumSodiumExt;
+use medicalc::lab::{NumericRanged, ResultRange};
 
 fn main() {
     println!("DEVELOPMENT TESTING");
     println!("Not part of the library.");
+
+    println!("CKD-EPI calculations:");
+    let scr_vals = vec![1.0f64, 1.2, 1.4, 1.6, 1.8, 2.0, 2.5, 3.0, 3.5, 4.0];
+    for val in &scr_vals {
+        let scr = val.cr_serum_mg_dl();
+        let m_egfr = egfr_ckd_epi(scr, Years(50.0), Gender::Male);
+        let f_egfr = egfr_ckd_epi(scr, Years(50.0), Gender::Female);
+        print!("{scr}  -  {m_egfr}  -  {f_egfr}");
+        match scr.range() {
+            ResultRange::High => print!("(!)"),
+            ResultRange::CriticalHigh => print!("(!!)"),
+            _ => (),
+        }
+        println!();
+    }
 
     println!("Sodium Corrections for Glucose");
     let na_measured = 126.0.na_serum_meq();
