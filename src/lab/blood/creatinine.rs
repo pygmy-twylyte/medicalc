@@ -52,16 +52,16 @@ impl<U: Unit> std::fmt::Display for Creatinine<U> {
 
 /// Defines convenience constructors for serum creatinine measurements from f64 values.
 pub trait CreatinineExt {
-    fn cr_serum_mg_dl(val: f64) -> Creatinine<MgdL>;
-    fn cr_serum_umol_l(val: f64) -> Creatinine<UmolL>;
+    fn cr_serum_mg_dl(self) -> Creatinine<MgdL>;
+    fn cr_serum_umol_l(self) -> Creatinine<UmolL>;
 }
 impl CreatinineExt for f64 {
-    fn cr_serum_mg_dl(val: f64) -> Creatinine<MgdL> {
-        Creatinine::from(val)
+    fn cr_serum_mg_dl(self) -> Creatinine<MgdL> {
+        Creatinine::from(self)
     }
 
-    fn cr_serum_umol_l(val: f64) -> Creatinine<UmolL> {
-        Creatinine::from(val)
+    fn cr_serum_umol_l(self) -> Creatinine<UmolL> {
+        Creatinine::from(self)
     }
 }
 
@@ -148,20 +148,41 @@ mod tests {
 
     #[test]
     fn creatinine_ranges_in_mg_dl_are_selected_correctly() {
-        assert_eq!(Creatinine::<MgdL>::from(0.4).range(), ResultRange::CriticalLow);
+        assert_eq!(
+            Creatinine::<MgdL>::from(0.4).range(),
+            ResultRange::CriticalLow
+        );
         assert_eq!(Creatinine::<MgdL>::from(0.8).range(), ResultRange::Low);
         assert_eq!(Creatinine::<MgdL>::from(1.1).range(), ResultRange::Normal);
         assert_eq!(Creatinine::<MgdL>::from(2.0).range(), ResultRange::High);
-        assert_eq!(Creatinine::<MgdL>::from(4.0).range(), ResultRange::CriticalHigh);
+        assert_eq!(
+            Creatinine::<MgdL>::from(4.0).range(),
+            ResultRange::CriticalHigh
+        );
     }
 
     #[test]
     fn creatinine_ranges_in_umol_l_match_thresholds() {
         let factor = SCR_MGDL_TO_UMOLL;
-        assert_eq!(Creatinine::<UmolL>::from(0.5 * factor).range(), ResultRange::CriticalLow);
-        assert_eq!(Creatinine::<UmolL>::from(0.8 * factor).range(), ResultRange::Low);
-        assert_eq!(Creatinine::<UmolL>::from(1.1 * factor).range(), ResultRange::Normal);
-        assert_eq!(Creatinine::<UmolL>::from(2.0 * factor).range(), ResultRange::High);
-        assert_eq!(Creatinine::<UmolL>::from(4.0 * factor).range(), ResultRange::CriticalHigh);
+        assert_eq!(
+            Creatinine::<UmolL>::from(0.5 * factor).range(),
+            ResultRange::CriticalLow
+        );
+        assert_eq!(
+            Creatinine::<UmolL>::from(0.8 * factor).range(),
+            ResultRange::Low
+        );
+        assert_eq!(
+            Creatinine::<UmolL>::from(1.1 * factor).range(),
+            ResultRange::Normal
+        );
+        assert_eq!(
+            Creatinine::<UmolL>::from(2.0 * factor).range(),
+            ResultRange::High
+        );
+        assert_eq!(
+            Creatinine::<UmolL>::from(4.0 * factor).range(),
+            ResultRange::CriticalHigh
+        );
     }
 }
