@@ -8,9 +8,18 @@ pub trait Unit {
     const ABBR: &'static str;
 }
 
+pub mod bilirubin;
 pub mod creatinine;
 pub mod glucose;
 pub mod sodium;
+pub mod vitals;
+
+/// INR "Units" (actually unitless)
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub struct InrUnit;
+impl Unit for InrUnit {
+    const ABBR: &'static str = "INR";
+}
 
 /// GFR Units (mL/min/1.73m^2)
 #[derive(Debug, Clone, Copy, PartialEq)]
@@ -45,4 +54,39 @@ impl Unit for MmolL {
 pub struct UmolL;
 impl Unit for UmolL {
     const ABBR: &'static str = "µmol/L";
+}
+
+/// Kilograms
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub struct Kg;
+impl Unit for Kg {
+    const ABBR: &'static str = "kg";
+}
+
+/// Pounds
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub struct Lb;
+impl Unit for Lb {
+    const ABBR: &'static str = "lb";
+}
+
+/// Meters
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub struct Meter;
+impl Unit for Meter {
+    const ABBR: &'static str = "m";
+}
+
+/// Feet
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub struct Foot;
+impl Unit for Foot {
+    const ABBR: &'static str = "ft";
+}
+
+/// Kilograms per meter squared (for BMI)
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub struct KgM2;
+impl Unit for KgM2 {
+    const ABBR: &'static str = "kg/m²";
 }

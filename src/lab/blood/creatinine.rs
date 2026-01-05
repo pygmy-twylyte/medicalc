@@ -4,7 +4,7 @@
 use std::marker::PhantomData;
 
 use crate::{
-    constants::SCR_MGDL_TO_UMOLL,
+    constants::{SCR_MGDL_TO_UMOLL, SCR_UMOLL_TO_MGDL},
     lab::{NumericRanged, RangeThreshold, ResultRange, select_range},
     units::{MgdL, UmolL, Unit},
 };
@@ -91,7 +91,7 @@ impl From<f64> for Creatinine<UmolL> {
 impl From<Creatinine<UmolL>> for Creatinine<MgdL> {
     fn from(scr: Creatinine<UmolL>) -> Self {
         Creatinine {
-            value: scr.value / SCR_MGDL_TO_UMOLL,
+            value: scr.value * SCR_UMOLL_TO_MGDL,
             _ghost: PhantomData,
         }
     }

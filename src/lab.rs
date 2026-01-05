@@ -2,6 +2,7 @@ use crate::units::Unit;
 
 pub mod blood;
 pub mod gfr;
+pub mod vitals;
 
 /// Trait shared by numeric lab values with defined normal and abnormal ranges
 pub trait NumericRanged<U: Unit> {
