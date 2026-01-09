@@ -1,6 +1,7 @@
 use medicalc::calculators::bmi;
 use medicalc::calculators::cha2ds2_va::Cha2Ds2VA;
-use medicalc::history::Years;
+use medicalc::calculators::cha2ds2_vasc::ChadsVasc;
+use medicalc::history::{Gender, Years};
 use medicalc::lab::vitals::{Height, Weight, WeightExt};
 use medicalc::units::{Foot, Kg, Lb, Meter};
 
@@ -24,15 +25,21 @@ fn main() {
     println!("{}", bmi(height_ft, weight_kg));
     println!("{}", bmi(height_m, weight_lb));
 
-    println!("\nCHA₂DS₂-VA test:\n");
-    let stroke_risk_calculator = Cha2Ds2VA::new(Years(56.5)).has_htn().calculate();
+    println!("\nCHA₂DS₂-VA(Sc) tests:\n");
+    let chads_vasc = ChadsVasc::new(Years(68.0), Gender::Female)
+        .has_diabetes()
+        .has_htn()
+        .calculate();
+    let chads_va = Cha2Ds2VA::from(chads_vasc).calculate();
+
     println!("Annual stroke risks:");
     println!(
-        "{:.1}% without AC",
-        stroke_risk_calculator.annual_cva_risk_no_oac().unwrap()
+        "Without AC:\n\t{:.1}% CHA₂DS₂-VASc\n\t{:.1}% CHA₂DS₂-VA\n",
+        chads_vasc.annual_stroke_risk_pct().unwrap(),
+        chads_va.annual_cva_risk_no_oac().unwrap()
     );
     println!(
         "{:.1}% with AC",
-        stroke_risk_calculator.annual_cva_risk_with_oac().unwrap()
+        chads_va.annual_cva_risk_with_oac().unwrap()
     );
 }
