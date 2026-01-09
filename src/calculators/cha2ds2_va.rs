@@ -4,9 +4,10 @@
 
 // Let's see if scores like this work well in a builder-type pattern...
 
+use super::cha2ds2_vasc;
 use crate::history::Years;
 
-const CHADS_VA_STROKE_RISK_PCT_ANNUAL: [(f64, f64); 9] = [
+const ANNUAL_STROKE_PCT_WO_AND_WITH_AC: [(f64, f64); 9] = [
     (0.5, 0.2),
     (1.5, 0.5),
     (2.9, 1.0),
@@ -14,7 +15,7 @@ const CHADS_VA_STROKE_RISK_PCT_ANNUAL: [(f64, f64); 9] = [
     (7.3, 2.6),
     (11.2, 3.9),
     (15.5, 5.4),
-    (14.7, 5.1),
+    (14.7, 5.1), // odd, but confirmed that the table says risk dips here
     (19.5, 6.8),
 ];
 
@@ -82,22 +83,36 @@ impl Cha2Ds2VA {
     }
     pub fn annual_cva_risk_no_oac(&self) -> Option<f64> {
         if let Some(score) = self.score() {
-            Some(CHADS_VA_STROKE_RISK_PCT_ANNUAL[score as usize].0)
+            Some(ANNUAL_STROKE_PCT_WO_AND_WITH_AC[score as usize].0)
         } else {
             None
         }
     }
     pub fn annual_cva_risk_with_oac(&self) -> Option<f64> {
         if let Some(score) = self.score() {
-            Some(CHADS_VA_STROKE_RISK_PCT_ANNUAL[score as usize].1)
+            Some(ANNUAL_STROKE_PCT_WO_AND_WITH_AC[score as usize].1)
         } else {
             None
         }
     }
 }
+impl From<cha2ds2_vasc::ChadsVasc> for Cha2Ds2VA {
+    fn from(chads_vasc: cha2ds2_vasc::ChadsVasc) -> Self {
+        Self {
+            age: chads_vasc.age(),
+            chf: chads_vasc.chf(),
+            diabetes: chads_vasc.diabetes(),
+            htn: chads_vasc.htn(),
+            stroke: chads_vasc.stroke(),
+            vasc: chads_vasc.vasc(),
+            score: None,
+        }
+    }
+}
 
+#[cfg(test)]
 mod tests {
-    use super::*;
+    use crate::{calculators::cha2ds2_va::Cha2Ds2VA, history::Years};
 
     #[test]
     fn score_is_none_until_calculated() {
