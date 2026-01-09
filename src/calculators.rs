@@ -30,6 +30,7 @@ use crate::{
 };
 
 pub mod cha2ds2_va;
+pub mod cha2ds2_vasc;
 
 /// Sodium correction for hyperglycemia.
 ///
