@@ -19,7 +19,7 @@ const ANNUAL_STROKE_PCT_WO_AND_WITH_AC: [(f64, f64); 9] = [
     (19.5, 6.8),
 ];
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, Copy, PartialEq)]
 pub struct Cha2Ds2VA {
     age: Years,
     chf: bool,

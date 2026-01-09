@@ -10,7 +10,7 @@ use crate::history::{Gender, Years};
 const ANNUAL_CVA_RISK_TABLE: [f64; 10] = [0.2, 0.6, 2.2, 3.2, 4.8, 7.2, 9.7, 11.2, 10.8, 12.2];
 
 /// A CHA₂DS₂-VASc calculator.
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, Copy, PartialEq)]
 pub struct ChadsVasc {
     age: Years,
     sex: Gender,
